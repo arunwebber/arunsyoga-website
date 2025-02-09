@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychic Dice Roll Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            padding: 10px;
+            width: 50px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result-area {
+            margin: 20px 0;
+            font-size: 2em;
+        }
+        .score-area {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .dice {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            background-color: #f1f1f1;
+            border: 5px solid #007bff;
+            border-radius: 10px;
+            font-size: 3em;
+            line-height: 100px;
+            margin: 20px 0;
+            transition: transform 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Psychic Dice Roll Game</h1>
+        <div class="prediction-area">
+            <input type="number" id="prediction" min="1" max="6" placeholder="Predict (1-6)" required>
+            <button id="rollButton">Roll Dice</button>
+        </div>
+        <div class="result-area">
+            <div id="dice" class="dice">🎲</div>
+            <h2 id="result"></h2>
+            <h3 id="feedback"></h3>
+        </div>
+        <div class="score-area">
+            <h3>Correct Predictions: <span id="score">0</span></h3>
+            <h3>Total Rolls: <span id="totalRolls">0</span></h3>
+            <h3>Accuracy: <span id="accuracy">0%</span></h3>
+        </div>
+        <button id="resetButton">Replay Game</button>
+    </div>
+    <script>
+        let score = 0;
+        let totalRolls = 0;
+
+        const rollButton = document.getElementById('rollButton');
+        const predictionInput = document.getElementById('prediction');
+        const resultDisplay = document.getElementById('result');
+        const feedbackDisplay = document.getElementById('feedback');
+        const scoreDisplay = document.getElementById('score');
+        const totalRollsDisplay = document.getElementById('totalRolls');
+        const accuracyDisplay = document.getElementById('accuracy');
+        const resetButton = document.getElementById('resetButton');
+        const dice = document.getElementById('dice');
+
+        rollButton.addEventListener('click', rollDice);
+        resetButton.addEventListener('click', resetGame);
+
+        function rollDice() {
+            const prediction = parseInt(predictionInput.value);
+            if (isNaN(prediction) || prediction < 1 || prediction > 6) {
+                alert("Please enter a valid number between 1 and 6.");
+                return;
+            }
+
+            totalRolls++;
+            dice.style.transform = 'rotateY(360deg)'; // Rotate the dice for animation
+            let animatedRolls = [];
+
+            // Simulate multiple dice rolls for animation
+            for (let i = 0; i < 10; i++) {
+                animatedRolls.push(Math.floor(Math.random() * 6) + 1);
+            }
+
+            // Display the animated rolls
+            let currentIndex = 0;
+            const animationInterval = setInterval(() => {
+                dice.textContent = animatedRolls[currentIndex];
+                currentIndex++;
+                if (currentIndex >= animatedRolls.length) {
+                    clearInterval(animationInterval);
+                    const diceRoll = Math.floor(Math.random() * 6) + 1;
+                    dice.textContent = diceRoll; // Final dice roll
+
+                    // Feedback based on prediction
+                    if (diceRoll === prediction) {
+                        score++;
+                        feedbackDisplay.textContent = "Correct! You're on a roll!";
+                    } else {
+                        feedbackDisplay.textContent = "Missed this one, try again!";
+                    }
+                    updateScores();
+                }
+            }, 100); // Interval between animated rolls
+        }
+
+        function updateScores() {
+            scoreDisplay.textContent = score;
+            totalRollsDisplay.textContent = totalRolls;
+            const accuracy = ((score / totalRolls) * 100).toFixed(2);
+            accuracyDisplay.textContent = `${accuracy}%`;
+        }
+
+        function resetGame() {
+            score = 0;
+            totalRolls = 0;
+            predictionInput.value = '';
+            resultDisplay.textContent = '';
+            feedbackDisplay.textContent = '';
+            dice.textContent = '🎲'; // Reset dice face
+            updateScores();
+        }
+    </script>
+</body>

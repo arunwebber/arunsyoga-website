@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ball Drop Game</title>
+    <h1>Ball Drop Game</h1>
+    <p>You are provided with ten drops of the ball. Each time you press the "Drop Ball" button, the ball will fall. There are ten choices for you. At the beginning, you will be asked to choose the color that can be hit the most. Choose the color and begin the game. Let's see if your ESP works!</p>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .game-board {
+            display: inline-block;
+            position: relative;
+            width: 400px;
+            height: 600px;
+            margin: 20px auto;
+            background-color: #ddd;
+            border: 2px solid #333;
+        }
+
+        .drop-zone {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            height: 50px;
+            background-color: #fff;
+            border-bottom: 2px solid #333;
+        }
+
+        .ball {
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            top: -50px; /* Start above the board */
+        }
+
+        .buckets {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .bucket {
+            width: 70px;
+            height: 100px;
+            border-left: 2px solid #222;
+            border-right: 2px solid #222;
+            border-bottom: 2px solid #222;
+            border-top: none; /* Remove top border */
+            position: relative;
+        }
+
+        .bucket p {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: white;
+            margin: 0;
+        }
+
+        .remaining-drops {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-board">
+        <div class="drop-zone">
+            <button onclick="dropBall()">Drop Ball</button>
+            <div id="remaining-drops" class="remaining-drops"></div>
+        </div>
+        <div id="ball" class="ball"></div>
+        <div class="buckets">
+            <div class="bucket" style="background-color: red;" data-index="0">
+                <p>0</p>
+            </div>
+            <div class="bucket" style="background-color: blue;" data-index="1">
+                <p>0</p>
+            </div>
+            <div class="bucket" style="background-color: green;" data-index="2">
+                <p>0</p>
+            </div>
+            <div class="bucket" style="background-color: yellow;" data-index="3">
+                <p>0</p>
+            </div>
+            <div class="bucket" style="background-color: purple;" data-index="4">
+                <p>0</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let gravity = 0.98; // Gravity constant
+        let bounceFactor = 0.7; // How much the ball bounces back when it hits the sides
+        let velocityX = 0; // Horizontal velocity
+        let velocityY = 0; // Vertical velocity
+        let ball; // Ball element reference
+        let ballWidth = 30; // Ball's width
+        let gameWidth = 400; // Game board width
+        let gameHeight = 600; // Game board height
+        let ballX, ballY; // Current position of the ball
+        let isDropping = false; // To prevent multiple drops at the same time
+        const bucketCount = 5; // Number of buckets
+        let bucketHits = Array(bucketCount).fill(0); // Counter for each bucket
+        let dropCount = 0; // Count of drops
+        let userColorIndex = -1; // Index of user-selected color
+
+        // Function to start the game
+        function startGame() {
+            // Prompt the user to select a color
+            const colors = ["red", "blue", "green", "yellow", "purple"];
+            const colorPalette = colors.map((color, index) => 
+                `${index + 1}. ${color}`
+            ).join('\n');
+
+            let userChoice = prompt(`Choose a color by number:\n${colorPalette}`);
+            userColorIndex = parseInt(userChoice) - 1;
+
+            if (userColorIndex < 0 || userColorIndex >= colors.length) {
+                alert("Invalid choice. Please refresh to play again.");
+                return;
+            }
+
+            resetGame(); // Reset the game
+            dropCount = 0; // Initialize drop count
+            updateRemainingDrops(); // Update the remaining drops display
+        }
+
+        // Function to reset the game
+        function resetGame() {
+            bucketHits.fill(0); // Reset bucket hits
+            updateBucketCounters(); // Reset display
+        }
+
+        // Function to drop the ball
+        function dropBall() {
+            if (isDropping || dropCount >= 10) {
+                if (dropCount >= 10) {
+                    checkGameOver(); // Check if the game is over
+                }
+                return; // Prevent dropping more than 10 balls
+            }
+
+            isDropping = true;
+
+            ball = document.getElementById("ball");
+            ballX = Math.random() * (gameWidth - ballWidth); // Start at a random X position
+            ballY = 0; // Start at the top of the game board
+            velocityX = Math.random() < 0.5 ? -3 : 3; // Random initial horizontal velocity
+            velocityY = 1; // Initial downward velocity (simulating gravity)
+
+            ball.style.left = ballX + "px";
+            ball.style.top = ballY + "px";
+
+            dropCount++; // Increment the drop count
+            updateRemainingDrops(); // Update the remaining drops display
+            requestAnimationFrame(updateBall);
+        }
+
+        // Function to update ball position
+        function updateBall() {
+            // Apply gravity
+            velocityY += gravity;
+
+            // Update ball position
+            ballX += velocityX;
+            ballY += velocityY;
+
+            // Check for collisions with the walls
+            if (ballX <= 0 || ballX + ballWidth >= gameWidth) {
+                velocityX *= -bounceFactor; // Reverse horizontal direction with bounce
+                ballX = ballX <= 0 ? 0 : gameWidth - ballWidth; // Keep the ball inside the walls
+            }
+
+            // Check if ball hits the bottom (buckets area)
+            if (ballY + ballWidth >= gameHeight) {
+                velocityY *= -bounceFactor; // Bounce upward when hitting the bottom
+                ballY = gameHeight - ballWidth; // Keep the ball inside the board
+
+                // Check which bucket it falls into
+                let bucketIndex = Math.floor((ballX / gameWidth) * bucketCount);
+                bucketIndex = Math.min(bucketIndex, bucketCount - 1); // Ensure it's within bounds
+                bucketHits[bucketIndex]++; // Increment the counter for the corresponding bucket
+                updateBucketCounters(); // Update the displayed counters
+
+                // If the ball's bounce is too weak, stop the drop
+                if (Math.abs(velocityY) < 2) {
+                    isDropping = false; // Allow the ball to be dropped again
+                    return; // Stop updating the ball's position
+                }
+            }
+
+            // Update ball's style to reflect new position
+            ball.style.left = ballX + "px";
+            ball.style.top = ballY + "px";
+
+            requestAnimationFrame(updateBall); // Continue the animation
+        }
+
+        // Function to check if the game is over
+        function checkGameOver() {
+            let maxHits = Math.max(...bucketHits);
+            let winningColorIndex = bucketHits.indexOf(maxHits);
+
+            if (winningColorIndex === userColorIndex) {
+                alert("You won! The color you chose was hit the most!");
+            } else {
+                alert("You lost! The color you chose was not hit the most.");
+            }
+
+            // Ask if the user wants to play again
+            let playAgain = confirm("Do you want to play again?");
+            if (playAgain) {
+                startGame(); // Start a new game
+            }
+        }
+
+        // Function to update bucket counters
+        function updateBucketCounters() {
+            const buckets = document.querySelectorAll('.bucket p');
+            buckets.forEach((p, index) => {
+                p.textContent = bucketHits[index]; // Update the counter display
+            });
+        }
+
+        // Function to update remaining drops display
+        function updateRemainingDrops() {
+            const remainingDropsElement = document.getElementById("remaining-drops");
+            remainingDropsElement.textContent = `Remaining Drops: ${10 - dropCount}`;
+        }
+
+        // Start the game when the page loads
+        window.onload = startGame;
+    </script>
+</body>
+</html>

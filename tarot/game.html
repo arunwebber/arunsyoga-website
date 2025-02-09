@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Thoth Tarot Deck - Free initial consultation.</title>
+ 
+  <style>
+ body {
+  font-family: Arial, sans-serif;
+  background-image: url('https://via.placeholder.com/1500x800'); /* Replace with your background image */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+#card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+#card-container img {
+  width: 250px; /* Set a fixed width for cards */
+  max-width: 100%; /* Cards will scale down on smaller screens */
+  height: auto;
+  margin: 10px; /* Increase the margin between cards */
+  border: 2px solid #333;
+  border-radius: 5px;
+}
+
+#draw-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px 5px;
+}
+
+#message {
+  margin-top: 20px;
+}
+
+/* Responsive adjustments for smaller screens */
+@media screen and (max-width: 768px) {
+  #card-container img {
+    width: 200px; /* Adjust card size for smaller screens */
+  }
+
+  #draw-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Thoth Tarot Deck - Free Initial Consultation</h1>
+    <button id="home" onclick="openWebsiteInNewTab()">Go to Home</button>
+
+	<script>
+	function openWebsiteInNewTab() {
+	    window.open("https://arunsyoga.in", "_blank");
+	}
+	</script>
+	
+    <p>1)Enter the mystical realm and gaze at the card before you. Close your eyes and meditate briefly.</p>
+    <p>2)Ask your burning question. Press "draw a card" a new card will appear. and remember it.</p>
+    <p>3)Click "contact Arun to know more." A new whats app chat will appear.Share the revealed card with Arun.</p>
+    <p>4)Receive a free consultation for this moment.</p>
+    <p>5)Embrace the enchanting journey of divination and revelation.</p>
+    <div id="card-container">
+      <!-- Cards will be dynamically added here -->
+<!-- Initial card image -->
+      <img id="card-image" src="https://1.bp.blogspot.com/-Lsf7qlL1ejE/XagLiTwJKVI/AAAAAAAACYQ/oMso7KrFHAQ1vLwTvjruuKy96hzsuYrZACLcBGAsYHQ/s1600/fce3d082600915.5d22fc96a59ad.jpg" alt="Initial Card" />
+    </div>
+
+    <p>If whats app link is not working dont hesitate to ping me on whatsapp(+91 8147433408).</p>
+    <button id="draw-button" onclick="drawCard()">Draw a Card</button>
+    <div id="message"></div>
+  </div>
+
+  <script>
+    // Thoth Tarot Deck Cards
+    const thothTarotDeck = [
+      { name: '0', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/0.jpg' },
+      { name: '1', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/1.jpg' },
+      { name: '2', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/2.jpg' },
+      { name: '3', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/3.jpg' },
+      { name: '4', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/4.jpg' },
+      { name: '5', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/5.jpg' },
+      { name: '6', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/6.jpg' },
+      { name: '7', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/7.jpg' },
+      { name: '8', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/8.jpg' },
+      { name: '9', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/9.jpg' },
+      { name: '10', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/10.jpg' },
+      { name: '11', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/11.jpg' },
+      { name: '12', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/12.jpg' },
+      { name: '13', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/13.jpg' },
+      { name: '14', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/14.jpg' },
+      { name: '15', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/15.jpg' },
+      { name: '16', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/16.jpg' },
+      { name: '17', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/17.jpg' },
+      { name: '18', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/18.jpg' },
+      { name: '19', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/19.jpg' },
+      { name: '20', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/20.jpg' },
+      { name: '21', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/21.jpg' },
+      { name: '22', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/22.jpg' },
+      { name: '23', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/23.jpg' },
+      { name: '24', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/24.jpg' },
+      { name: '25', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/25.jpg' },
+      { name: '26', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/26.jpg' },
+      { name: '27', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/27.jpg' },
+      { name: '28', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/28.jpg' },
+      { name: '29', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/29.jpg' },
+      { name: '30', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/30.jpg' },
+      { name: '31', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/31.jpg' },
+      { name: '32', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/32.jpg' },
+      { name: '33', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/33.jpg' },
+      { name: '34', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/34.jpg' },
+      { name: '35', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/35.jpg' },
+      { name: '36', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/36.jpg' },
+      { name: '37', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/37.jpg' },
+      { name: '38', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/38.jpg' },
+      { name: '39', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/39.jpg' },
+      { name: '40', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/40.jpg' },
+      { name: '41', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/41.jpg' },
+      { name: '42', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/42.jpg' },
+      { name: '43', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/43.jpg' },
+      { name: '44', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/44.jpg' },
+      { name: '45', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/45.jpg' },
+      { name: '46', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/46.jpg' },
+      { name: '47', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/47.jpg' },
+      { name: '48', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/48.jpg' },
+      { name: '49', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/49.jpg' },
+      { name: '50', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/50.jpg' },
+      { name: '51', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/51.jpg' },
+      { name: '52', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/52.jpg' },
+      { name: '53', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/53.jpg' },
+      { name: '54', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/54.jpg' },
+      { name: '55', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/55.jpg' },
+      { name: '56', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/56.jpg' },
+      { name: '57', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/57.jpg' },
+      { name: '58', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/58.jpg' },
+      { name: '59', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/59.jpg' },
+      { name: '60', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/60.jpg' },
+      { name: '61', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/61.jpg' },
+      { name: '62', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/62.jpg' },
+      { name: '63', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/63.jpg' },
+      { name: '64', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/64.jpg' },
+      { name: '65', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/65.jpg' },
+      { name: '66', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/66.jpg' },
+      { name: '67', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/67.jpg' },
+      { name: '68', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/68.jpg' },
+      { name: '69', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/69.jpg' },
+      { name: '70', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/70.jpg' },
+      { name: '71', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/71.jpg' },
+      { name: '72', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/72.jpg' },
+      { name: '73', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/73.jpg' },
+      { name: '74', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/74.jpg' },
+      { name: '75', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/75.jpg' },
+      { name: '76', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/76.jpg' },
+      { name: '77', imageUrl: 'https://gfx.tarot.com/images/site/decks/crowley/full_size/77.jpg' }
+    ];
+
+    // Function to shuffle the deck using Fisher-Yates (Knuth) Shuffle algorithm
+    function shuffleDeck(deck) {
+      for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
+      }
+    }
+
+    // Function to draw a random card
+    function drawCard() {
+      const cardContainer = document.getElementById('card-container');
+      const messageDiv = document.getElementById('message');
+      const drawButton = document.getElementById('draw-button');
+
+      if (thothTarotDeck.length === 0) {
+        messageDiv.innerText = 'No cards left in the deck.';
+        drawButton.disabled = true;
+        return;
+      }
+
+      shuffleDeck(thothTarotDeck); // Shuffle the deck before drawing
+
+      const drawnCard = thothTarotDeck[0]; // Get the first card from the shuffled deck
+
+      const cardImage = new Image();
+      cardImage.src = drawnCard.imageUrl;
+
+      // Clear existing cards
+      cardContainer.innerHTML = '';
+      cardContainer.appendChild(cardImage);
+
+      // Show the "Contact Arun" message
+      const messageButton = document.createElement('button');
+      messageButton.innerText = 'Contact Arun to know more';
+      messageButton.onclick = () => {
+         window.open('https://wa.me/918147433408', '_blank');
+      };
+      messageDiv.innerHTML = '';
+      messageDiv.appendChild(messageButton);
+    }
+
+    // Set the initial card image when the page is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      const cardImage = document.getElementById('card-image');
+      cardImage.src = 'https://1.bp.blogspot.com/-Lsf7qlL1ejE/XagLiTwJKVI/AAAAAAAACYQ/oMso7KrFHAQ1vLwTvjruuKy96hzsuYrZACLcBGAsYHQ/s1600/fce3d082600915.5d22fc96a59ad.jpg';
+
+      // Add event listener to the "Draw a Card" button
+      const drawButton = document.getElementById('draw-button');
+      drawButton.addEventListener('click', drawCard);
+    });
+  </script>
+</body>
+</html>
+

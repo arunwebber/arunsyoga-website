@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precognition Puzzle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .doors {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .door {
+            background-color: #007BFF;
+            color: white;
+            padding: 40px;
+            font-size: 20px;
+            border: 2px solid #0056b3;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .door.opened {
+            background-color: #28a745;
+        }
+
+        .door.wrong {
+            background-color: #dc3545;
+        }
+
+        .message {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .restart, .reboot, .next-round {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        #scoreboard {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Precognition Puzzle</h1>
+        <p>Open doors to find the prize. Your ESP will be tested! At least ten rounds are advisable.</p>
+        <div id="doors" class="doors"></div>
+        <div id="message" class="message"></div>
+        <div class="button-container">
+            <button id="nextRound" class="next-round" onclick="nextRound()" style="display: none;">Next Round</button>
+            <button id="restart" class="restart" onclick="startGame()">Start New Game</button>
+            <button id="reboot" class="reboot" onclick="rebootGame()">Reboot</button>
+        </div>
+        <div id="scoreboard">
+            <p>Round: <span id="round">1</span></p>
+            <p>Current ESP Accuracy: <span id="accuracy">0%</span></p>
+            <p>Overall ESP Accuracy: <span id="overallAccuracy">0%</span></p> <!-- New Overall ESP Accuracy -->
+        </div>
+    </div>
+
+    <script>
+        const totalDoors = 10;
+        let correctDoor = Math.floor(Math.random() * totalDoors); // Random door with the prize
+        let turnsTaken = 0;
+        let round = 1;
+        let totalScore = 0;
+
+        function startGame() {
+            turnsTaken = 0;
+            correctDoor = Math.floor(Math.random() * totalDoors);
+            document.getElementById("doors").innerHTML = "";
+            document.getElementById("message").textContent = "Choose a door!";
+            document.getElementById("round").textContent = round;
+
+            // Create doors dynamically
+            for (let i = 0; i < totalDoors; i++) {
+                const door = document.createElement("div");
+                door.classList.add("door");
+                door.textContent = i + 1;
+                door.onclick = () => openDoor(i, door);
+                document.getElementById("doors").appendChild(door);
+            }
+
+            document.getElementById("nextRound").style.display = "none";
+            document.getElementById("restart").style.display = "none";
+        }
+
+        function openDoor(doorIndex, doorElement) {
+            turnsTaken++;
+            if (doorIndex === correctDoor) {
+                doorElement.classList.add("opened");
+                document.getElementById("message").textContent = `You found the prize in ${turnsTaken} turns!`;
+                calculateScore();
+                round++;
+                document.getElementById("nextRound").style.display = "block"; // Show Next Round button
+            } else {
+                doorElement.classList.add("wrong");
+                document.getElementById("message").textContent = "Keep trying!";
+            }
+        }
+
+        function calculateScore() {
+            // Calculate accuracy for the current round
+            let accuracy = ((totalDoors - turnsTaken + 1) / totalDoors) * 100;
+            totalScore += accuracy;
+            document.getElementById("accuracy").textContent = accuracy.toFixed(2) + "%";
+            document.getElementById("overallAccuracy").textContent = (totalScore / round).toFixed(2) + "%"; // Update overall accuracy
+        }
+
+        function nextRound() {
+            startGame(); // Start the next round
+        }
+
+        function rebootGame() {
+            // Reset all values to zero and start a new game
+            round = 1;
+            totalScore = 0;
+            turnsTaken = 0;
+            document.getElementById("accuracy").textContent = "0%";
+            document.getElementById("overallAccuracy").textContent = "0%"; // Reset overall accuracy
+            document.getElementById("message").textContent = "Game rebooted! Pick a door.";
+            startGame();
+        }
+
+        startGame();
+    </script>
+</body>
+</html>
